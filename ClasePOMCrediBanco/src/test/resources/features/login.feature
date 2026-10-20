@@ -12,4 +12,4 @@ Feature: Compra completa en SauceDemo
     And el usuario hace clic en Continue
     Then el usuario ve el resumen de compra
     And el usuario hace clic en Finish
-    Then el usuario confirma que la cgit --versionompra finalizo
+    Then el usuario confirma que la compra finalizo

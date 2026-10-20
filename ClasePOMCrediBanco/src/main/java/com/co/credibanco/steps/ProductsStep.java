@@ -25,15 +25,12 @@ public class ProductsStep extends PageObject {
 
     public void abrirCarrito() {
         $(productsPage.getBTN_CART()).waitUntilVisible();
-        pausa();
         $(productsPage.getBTN_CART()).click();
-        pausa();
 
         waitForCondition().until(
                 driver -> driver.getCurrentUrl().contains("cart.html")
         );
     }
-
     public boolean mochilaVisibleEnCarrito() {
         return $(productsPage.getTXT_PRODUCT_CART()).isVisible()
                 && $(productsPage.getTXT_PRODUCT_CART())
