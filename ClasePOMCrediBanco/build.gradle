@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        mavenCentral()
+    }
+    ext {
+        serenityVersion = '4.0.12'
+        cucumberVersion = '7.14.0'
+        poiVersion      = '5.2.5'
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:$rootProject.ext.serenityVersion")
+        classpath("net.serenity-bdd:serenity-single-page-report:$rootProject.ext.serenityVersion")
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'net.serenity-bdd.serenity-gradle-plugin'
+
+group = 'com.co.credibanco'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+serenity {
+    reports = ["single-page-html"]
+}
+
+dependencies {
+    // Serenity BDD (serenity-core trae io.appium:java-client 8.5.1 y Selenium compatibles — NO declararlos aparte)
+    implementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-ensure:${serenityVersion}"
+
+    // Cucumber
+    implementation "io.cucumber:cucumber-java:${cucumberVersion}"
+
+    // JUnit (requerido por CucumberWithSerenity)
+    testImplementation 'junit:junit:4.13.2'
+
+    // Assertions
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+
+    // Apache POI (Excel)
+    implementation "org.apache.poi:poi:${poiVersion}"
+    implementation "org.apache.poi:poi-ooxml:${poiVersion}"
+
+    // Logback (único logger permitido)
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+}
+
+tasks.withType(Test).configureEach {
+    gradle.startParameter.continueOnFailure = true
+    test.finalizedBy(aggregate)
+}
